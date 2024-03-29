@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[4]:
-
-
 import pandas as pd
 df = pd.read_csv('NinjaTrader.csv') #retrieve our raw data file
 
@@ -11,18 +5,10 @@ get_ipython().run_line_magic('run', 'NTTimeCalc.ipynb')
 import import_ipynb
 from NTTimeCalc import ticks_to_DT #import functions to clean up timestamp data
 
-
-# In[214]:
-
-
 #check for duplicate data
 df.duplicated().any()
 #check for any null values
 df.isnull().any()
-
-
-# In[215]:
-
 
 def LS (binInput): #convert the binary 'MarketPosition' column into 'Buy'/'Sell' strings
     if binInput == 0: 
@@ -33,11 +19,7 @@ def LS (binInput): #convert the binary 'MarketPosition' column into 'Buy'/'Sell'
 df['OrderType'] = df['MarketPosition'].apply(LS)
 
 
-# In[218]:
-
-
 #create TradeID based on 'Position' resets (0)
-
 lastPos = None
 lastID = 0
 
@@ -53,9 +35,6 @@ def trade_ID(row):
         return lastID
 
 df['TradeID'] = df.apply(trade_ID, axis=1)
-
-
-# In[222]:
 
 
 #create grouped trades by 'TradeID'
@@ -92,8 +71,6 @@ for idValue, row_num in gTrades.items(): #iterate through ID groups to calculate
                 PL.append(PL_total)
 
 
-# In[223]:
-
 
 #establish new dataframe using calculated TradeIDs, contracts, and P/L
 tradedf = pd.DataFrame(columns=['TradeID', 'Order Type', 'Contracts', 'Profit/Loss', 'Time'])
@@ -103,9 +80,6 @@ tradedf['Order Type'] = df['OrderType']
 tradedf['Contracts'] = contractQ
 tradedf['Profit/Loss'] = PL
 tradedf['Time'] = df['Time']
-
-
-# In[224]:
 
 
 #export updated dataframes to csv files
